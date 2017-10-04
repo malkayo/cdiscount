@@ -1,0 +1,23 @@
+Project:
+
+ Scripts to be developped:
+   ☐ exploration scripts: processing_bson_files,category_names_and_levels @started 
+   ☐ data loading script (caching or sampling?, speed)
+   ☐ pic processing script
+   ☐ label processing script
+   ☐ basic model script
+   ☐ result output script
+   ☐ performance tracking script
+
+  Architecture Dependencies:
+   ☐ data loading pre-processing function will be used in the TF data pipeline / study how the TF pipeline should be set up @ started
+
+   Quality:
+     ☐ functions will be documented using http://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
+
+Code:
+
+  Basic Model:
+    ☐ directly match a pretrained model's last layer to the 5000 categories
+    ☐ does not have to train on the entire training data set
+    ☐ more advanced model may use the product category levels (see notebooks/category_names_and_levels) with one "simple" model to discriminate at each level except for the first the model who would have the most conv layer
