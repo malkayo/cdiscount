@@ -12,7 +12,8 @@ from keras.preprocessing.image import Iterator
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 
-train_data_dir = "/media/yoni/DATA/"
+# train_data_dir = "/media/yoni/DATA/"
+train_data_dir = "../data/"
 
 train_bson_path = train_data_dir + "train.bson"
 
@@ -92,11 +93,15 @@ class BSONIterator(Iterator):
 train_bson_file = open(train_bson_path, "rb")
 
 lock = threading.Lock()
-
 num_classes = 5270
 num_train_images = len(train_images_df)
 num_val_images = len(val_images_df)
-batch_size = 128
+batch_size = 64
+
+print("num_train_images: {}".format(num_train_images))
+print("num_val_images: {}".format(num_val_images))
+print("batch_size: {}".format(batch_size))
+
 
 # Tip: use ImageDataGenerator for data augmentation and preprocessing.
 train_datagen = ImageDataGenerator()
@@ -107,7 +112,7 @@ train_gen = BSONIterator(train_bson_file, train_images_df, train_offsets_df,
 val_datagen = ImageDataGenerator()
 val_gen = BSONIterator(train_bson_file, val_images_df, train_offsets_df,
                        num_classes, val_datagen, lock,
-                       batch_size=batch_size, shuffle=True)
+                       batch_size=1, shuffle=True)
 
 # Debug
 # print("Start timer")
