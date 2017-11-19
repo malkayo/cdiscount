@@ -3,15 +3,16 @@ Project:
  Scripts to be developped:
    ☐ exploration scripts: processing_bson_files,category_names_and_levels @complete
    ☐ how many pictures per product? => 1 to 4 with  more than 80% with only 1 picture
-   ☐ data loading script (caching or sampling?, speed)
-   ☐ pic processing script
    ☐ label processing script
-   ☐ basic model script
-   ☐ result output script
-   ☐ performance tracking script
+   ☐ validation error investigation notebook
+   ☐ data indexing script [index.py] @complete
+   ☐ pic processing script [generator.py] @complete
+   ☐ basic model script [training.py] @complete
+   ☐ result output script [predict.py] @complete
+   ☐ performance tracking script [tensorflow callback in training.py] @complete
 
   Architecture Dependencies:
-   ☐ data loading pre-processing function will be used in the TF data pipeline / study how the TF pipeline should be set up @ started
+   ☐ data loading pre-processing function will be used in the TF data pipeline / study how the TF pipeline should be set up @complete
 
    Quality:
      ☐ functions will be documented using http://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
@@ -19,8 +20,8 @@ Project:
 Code:
 
   Basic Model:
-    ☐ directly match a pretrained model's last layer to the 5000 categories
-    ☐ does not have to train on the entire training data set
+    ☐ directly match a pretrained model's last layer to the 5000 categories [InceptionV3]
+    ☐ does not have to train on the entire training data set [20%]
     ☐ more advanced model may use the product category levels (see notebooks/category_names_and_levels) with one "simple" model to discriminate at each level except for the first the model who would have the most conv layer
 
   Queuing Module:
@@ -30,6 +31,7 @@ Code:
     ☐ Perform image processing
     ☐ Enqueue processed image data into a RandomShuffleQueue
     ☐ Dequeue data batches for classifier training
+    ☐ NOT USED: for complexity reasons ; used keras generator instead
 
   Predict.py:
-    ☐ Install h5py (see save_model() call in training.py)
+    ☐ Install h5py (see save_model() call in training.py) @complete
