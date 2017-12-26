@@ -1,11 +1,13 @@
 import pandas as pd
 import numpy as np
+import pickle
 
 from tqdm import *
 from collections import defaultdict
 
 data_dir = "../data/"
-train_data_dir = "/media/yoni/DATA"
+train_data_dir = data_dir
+# train_data_dir = "/media/yoni/DATA"
 
 categories_df = pd.read_csv("categories.csv", index_col="category_id")
 train_offsets_df = pd.read_csv("train_offsets.csv")
@@ -33,8 +35,11 @@ cat2idx, idx2cat = make_category_tables()
 # validation images. There is a row for every single image, so if a product has
 # more than one image it occurs more than once in the table.
 
+with open("taboo_category_id.pickle", "rb") as f:
+    taboo_category_ids = pickle.load(f)
 
-def make_val_set(df, split_percentage=0.2, drop_percentage=0.):
+
+def make_val_set(df, split_percentage=0.2, drop_percentage=0., taboo_list=None):
     # Find the product_ids for each category.
     category_dict = defaultdict(list)
     for ir in tqdm(df.itertuples()):
@@ -44,6 +49,7 @@ def make_val_set(df, split_percentage=0.2, drop_percentage=0.):
     val_list = []
     with tqdm(total=int((1 - drop_percentage) * len(df))) as pbar:
         for category_id, product_ids in category_dict.items():
+
             category_idx = cat2idx[category_id]
 
             # Randomly remove products to make the dataset smaller.
@@ -68,6 +74,9 @@ def make_val_set(df, split_percentage=0.2, drop_percentage=0.):
                     if product_id in val_ids:
                         val_list.append(row + [img_idx])
                     else:
+                        # don't put element from the taboo list in training data
+                        if taboo_list and category_id in taboo_list:
+                            continue
                         train_list.append(row + [img_idx])
                 pbar.update()
 
@@ -77,11 +86,11 @@ def make_val_set(df, split_percentage=0.2, drop_percentage=0.):
     return train_df, val_df
 
 
-split_percentage = 0.2
-drop_percentage = 0.8
+split_percentage = 0.15
+drop_percentage = 0.0
 train_images_df, val_images_df = make_val_set(
     train_offsets_df, split_percentage=split_percentage,
-    drop_percentage=drop_percentage)
+    drop_percentage=drop_percentage, taboo_list=taboo_category_ids)
 
 # debug
 # print(train_images_df[:20])
@@ -103,7 +112,7 @@ print(len(train_images_df["category_idx"].unique()),
 
 # Save the lookup tables as CSV so that we don't need to repeat the above
 # procedure again.
-train_images_df.to_csv("train_images_split-{}_drop-{}.csv".format(
+train_images_df.to_csv("train_images_split-{}_drop-{}_taboo.csv".format(
     split_percentage, drop_percentage))
-val_images_df.to_csv("val_images_split-{}_drop-{}.csv".format(
+val_images_df.to_csv("val_images_split-{}_drop-{}_taboo.csv".format(
     split_percentage, drop_percentage))

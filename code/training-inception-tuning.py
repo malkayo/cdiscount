@@ -10,7 +10,7 @@ from keras.callbacks import TensorBoard
 from generator import *
 from keras.applications import InceptionV3
 import os
-# base_model = InceptionV3(weights='imagenet', include_top=False)
+base_model = InceptionV3(weights='imagenet', include_top=False)
 FC_SIZE = 2048
 
 # def add_new_last_layer(base_model, nb_classes):
@@ -30,7 +30,6 @@ FC_SIZE = 2048
 
 
 # model = add_new_last_layer(base_model, nb_classes=num_classes)
-adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 
 
 def load_model(modelf_location):
@@ -61,7 +60,8 @@ def load_model(modelf_location):
     return model
 
 
-model = load_model("./19112017model")
+model = load_model("./28112017model")
+adam = Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 model.compile(optimizer=adam,
               loss="categorical_crossentropy",
               metrics=["accuracy"])
@@ -75,9 +75,9 @@ tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0,
 model.fit_generator(
     train_gen,
     steps_per_epoch=100,  # num_train_images // batch_size,
-    epochs=300,
+    epochs=500,
     validation_data=val_gen,
-    validation_steps=1000,  # num_val_images // batch_size,
+    validation_steps=10,  # num_val_images // batch_size,
     workers=16,
     callbacks=[tensorboard])
 
@@ -92,6 +92,6 @@ def save_model(model, modelf_location):
     model.save_weights(modelf_location + ".h5", overwrite=True)
 
 
-save_model(model, "./19112017model")
+save_model(model, "./")
 
 # around 23%
