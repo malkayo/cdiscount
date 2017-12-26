@@ -19,8 +19,8 @@ train_bson_path = train_data_dir + "train.bson"
 
 train_offsets_df = pd.read_csv("train_offsets.csv")
 
-train_images_df = pd.read_csv("train_images_split-0.2_drop-0.8.csv")
-val_images_df = pd.read_csv("val_images_split-0.2_drop-0.8.csv")
+train_images_df = pd.read_csv("train_images_split-0.15_drop-0.0_taboo.csv")
+val_images_df = pd.read_csv("val_images_split-0.15_drop-0.0_taboo.csv")
 
 
 class BSONIterator(Iterator):
@@ -112,7 +112,7 @@ train_gen = BSONIterator(train_bson_file, train_images_df, train_offsets_df,
 val_datagen = ImageDataGenerator()
 val_gen = BSONIterator(train_bson_file, val_images_df, train_offsets_df,
                        num_classes, val_datagen, lock,
-                       batch_size=1, shuffle=True)
+                       batch_size=batch_size, shuffle=True)
 
 # Debug
 # print("Start timer")

@@ -41,7 +41,7 @@ def load_model(modelf_location):
     return model
 
 
-model = load_model("./19112017model")
+model = load_model("./28112017modelplus")
 
 categories_df = pd.read_csv("categories.csv", index_col="category_id")
 train_offsets_df = pd.read_csv("train_offsets.csv")
@@ -58,7 +58,6 @@ def make_category_tables():
         cat2idx[category_id] = category_idx
         idx2cat[category_idx] = category_id
     return cat2idx, idx2cat
-
 
 cat2idx, idx2cat = make_category_tables()
 train_data_dir = "../data/"
@@ -98,4 +97,4 @@ with tqdm(total=num_test_products) as pbar:
         submission_df.iloc[c]["category_id"] = idx2cat[cat_idx]
         pbar.update()
 
-submission_df.to_csv("19112017_submission.csv.gz", compression="gzip", index=False)
+submission_df.to_csv("20172911_submission.csv.gz", compression="gzip", index=False)
